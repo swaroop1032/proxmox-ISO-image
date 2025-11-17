@@ -7,8 +7,8 @@ packer {
   }
 }
 
-variable "pm_url"       { default = "https://172.18.0.48:8006/api2/json" }
-variable "pm_user"      {}
+variable "pm_url"       { default = "https://<PROXMOX_IP>:8006/api2/json" }
+variable "pm_user"      {}   # terraform@pam!<TOKEN_ID>
 variable "pm_token"     {}
 variable "node"         { default = "proxmox" }
 variable "iso_storage"  { default = "local" }
@@ -22,7 +22,7 @@ source "proxmox-iso" "win11" {
   token             = var.pm_token
   node              = var.node
 
-  vm_name           = "Custom-template-Win11"
+  vm_name           = "tpl-win11-25h2"
   memory            = 4096
   cores             = 2
   disk_size         = "60G"
@@ -39,7 +39,6 @@ source "proxmox-iso" "win11" {
   network_adapter   = "virtio"
   bridge            = var.bridge
   disk_interface    = "virtio"
-
   qemu_agent        = true
 
   floppy_files      = ["packer/Autounattend.xml"]
@@ -62,23 +61,14 @@ build {
     inline = [
       "powershell -ExecutionPolicy Bypass -File C:\\Windows\\Temp\\install-virtio-drivers.ps1",
       "powershell -ExecutionPolicy Bypass -File C:\\Windows\\Temp\\install-qemu-agent.ps1",
-      "powershell -ExecutionPolicy Bypass -File C:\\Windows\\Temp\\install-cloudbase-init.ps1"
-    ]
-  }
-
-  provisioner "windows-shell" {
-    inline = [ "Write-Host 'Customization complete'" ]
-  }
-
-  provisioner "windows-shell" {
-    inline = [
+      "powershell -ExecutionPolicy Bypass -File C:\\Windows\\Temp\\install-cloudbase-init.ps1",
       "powershell -ExecutionPolicy Bypass -File C:\\Windows\\Temp\\prepare-template.ps1"
     ]
   }
 
   post-processor "shell-local" {
     inline = [
-      "ssh root@172.18.0.48 'qm stop $(qm list | awk \"/tpl-win11-25h2/ {print \\$1}\"); qm template $(qm list | awk \"/tpl-win11-25h2/ {print \\$1}\")'"
+      "ssh root@<PROXMOX_IP> 'qm stop $(qm list | awk \"/tpl-win11-25h2/ {print \\$1}\"); qm template $(qm list | awk \"/tpl-win11-25h2/ {print \\$1}\")'"
     ]
   }
 }
