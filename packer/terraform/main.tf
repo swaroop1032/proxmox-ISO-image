@@ -5,7 +5,7 @@ variable "pm_api_url"      { default = "https://172.18.0.48:8006/api2/json" }
 variable "pm_api_token_id" {}
 variable "pm_api_token_secret" {}
 variable "node"            { default = "proxmox" }
-variable "vm_name"         { default = "win11-auto-01" }
+variable "vm_name"         { default = "windows-test-vm" }
 variable "storage"         { default = "local-lvm" }
 variable "bridge"          { default = "vmbr0" }
 
