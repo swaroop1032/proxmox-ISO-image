@@ -22,7 +22,7 @@ source "proxmox-iso" "win11" {
   token             = var.pm_token
   node              = var.node
 
-  vm_name           = "tpl-win11-25h2"
+  vm_name           = "Custom-template-Win11"
   memory            = 4096
   cores             = 2
   disk_size         = "60G"
