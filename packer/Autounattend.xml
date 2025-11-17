@@ -1,97 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
-<unattend xmlns="urn:schemas-microsoft-com:unattend">
-
-  <settings pass="windowsPE">
-    <component name="Microsoft-Windows-Setup" processorArchitecture="amd64"
-               publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
-
-      <DiskConfiguration>
-        <Disk wcm:action="add" wcm:keyValue="0">
-          <WillWipeDisk>true</WillWipeDisk>
-          <DiskID>0</DiskID>
-          <CreatePartitions>
-            <CreatePartition wcm:action="add"><Order>1</Order><Type>EFI</Type><Size>100</Size></CreatePartition>
-            <CreatePartition wcm:action="add"><Order>2</Order><Type>MSR</Type><Size>16</Size></CreatePartition>
-            <CreatePartition wcm:action="add"><Order>3</Order><Type>Primary</Type><Extend>true</Extend></CreatePartition>
-          </CreatePartitions>
-        </Disk>
-      </DiskConfiguration>
-
-      <ImageInstall>
-        <OSImage>
-          <InstallFrom>
-            <MetaData wcm:action="add"><Key>/IMAGE/INDEX</Key><Value>1</Value></MetaData>
-          </InstallFrom>
-          <InstallTo><DiskID>0</DiskID><PartitionID>3</PartitionID></InstallTo>
-        </OSImage>
-      </ImageInstall>
-
-      <UserData><AcceptEula>true</AcceptEula></UserData>
-
-      <DriverPaths>
-        <PathAndCredentials wcm:action="add"><Path>D:\viostor\w10\amd64</Path></PathAndCredentials>
-        <PathAndCredentials wcm:action="add"><Path>D:\NetKVM\w10\amd64</Path></PathAndCredentials>
-        <PathAndCredentials wcm:action="add"><Path>D:\Balloon\w10\amd64</Path></PathAndCredentials>
-      </DriverPaths>
-
-    </component>
-  </settings>
-
-  <settings pass="oobeSystem">
-    <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64"
-               publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
-
-      <OOBE>
-        <HideEULAPage>true</HideEULAPage>
-        <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
-        <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
-        <HideLocalAccountScreen>true</HideLocalAccountScreen>
-        <SkipMachineOOBE>true</SkipMachineOOBE>
-        <SkipUserOOBE>true</SkipUserOOBE>
-        <NetworkLocation>Work</NetworkLocation>
-      </OOBE>
-
-      <UserAccounts>
-        <AdministratorPassword>
-          <Value>Passw0rd!</Value>
-          <PlainText>true</PlainText>
-        </AdministratorPassword>
-      </UserAccounts>
-
-      <TimeZone>India Standard Time</TimeZone>
-      <ComputerName>win11-template</ComputerName>
-
-      <AutoLogon>
-        <Username>Administrator</Username>
-        <Password><Value>Passw0rd!</Value><PlainText>true</PlainText></Password>
-        <Enabled>true</Enabled>
-        <LogonCount>1</LogonCount>
-      </AutoLogon>
-
-      <FirstLogonCommands>
-        <SynchronousCommand wcm:action="add">
-          <Order>1</Order>
-          <Description>Install VirtIO drivers</Description>
-          <CommandLine>powershell -ExecutionPolicy Bypass -File C:\Windows\Temp\install-virtio-drivers.ps1</CommandLine>
-        </SynchronousCommand>
-        <SynchronousCommand wcm:action="add">
-          <Order>2</Order>
-          <Description>Install QEMU Guest Agent</Description>
-          <CommandLine>powershell -ExecutionPolicy Bypass -File C:\Windows\Temp\install-qemu-agent.ps1</CommandLine>
-        </SynchronousCommand>
-        <SynchronousCommand wcm:action="add">
-          <Order>3</Order>
-          <Description>Install Cloudbase-Init</Description>
-          <CommandLine>powershell -ExecutionPolicy Bypass -File C:\Windows\Temp\install-cloudbase-init.ps1</CommandLine>
-        </SynchronousCommand>
-        <SynchronousCommand wcm:action="add">
-          <Order>99</Order>
-          <Description>Prepare template (Sysprep)</Description>
-          <CommandLine>powershell -ExecutionPolicy Bypass -File C:\Windows\Temp\prepare-template.ps1</CommandLine>
-        </SynchronousCommand>
-      </FirstLogonCommands>
-
-    </component>
-  </settings>
-
-</unattend>
+<FirstLogonCommands>
+  <SynchronousCommand wcm:action="add"><Order>1</Order>
+    <CommandLine>pnputil /add-driver D:\viostor\w10\amd64\*.inf /install</CommandLine>
+  </SynchronousCommand>
+  <SynchronousCommand wcm:action="add"><Order>2</Order>
+    <CommandLine>pnputil /add-driver D:\NetKVM\w10\amd64\*.inf /install</CommandLine>
+  </SynchronousCommand>
+  <SynchronousCommand wcm:action="add"><Order>3</Order>
+    <CommandLine>pnputil /add-driver D:\Balloon\w10\amd64\*.inf /install</CommandLine>
+  </SynchronousCommand>
+  <SynchronousCommand wcm:action="add"><Order>10</Order>
+    <CommandLine>powershell -ExecutionPolicy Bypass -File C:\Windows\Temp\install-qemu-agent.ps1</CommandLine>
+  </SynchronousCommand>
+  <SynchronousCommand wcm:action="add"><Order>11</Order>
+    <CommandLine>powershell -ExecutionPolicy Bypass -File C:\Windows\Temp\install-cloudbase-init.ps1</CommandLine>
+  </SynchronousCommand>
+  <SynchronousCommand wcm:action="add"><Order>99</Order>
+    <CommandLine>powershell -ExecutionPolicy Bypass -File C:\Windows\Temp\prepare-template.ps1</CommandLine>
+  </SynchronousCommand>
+</FirstLogonCommands>
