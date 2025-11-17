@@ -78,7 +78,7 @@ build {
 
   post-processor "shell-local" {
     inline = [
-      "ssh root@<YOUR_PVE_IP> 'qm stop $(qm list | awk \"/tpl-win11-25h2/ {print \\$1}\"); qm template $(qm list | awk \"/tpl-win11-25h2/ {print \\$1}\")'"
+      "ssh root@172.18.0.48 'qm stop $(qm list | awk \"/tpl-win11-25h2/ {print \\$1}\"); qm template $(qm list | awk \"/tpl-win11-25h2/ {print \\$1}\")'"
     ]
   }
 }
