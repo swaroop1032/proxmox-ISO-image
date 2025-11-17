@@ -1,7 +1,7 @@
 terraform {
   required_providers { proxmox = { source = "bpg/proxmox", version = ">= 0.40.0" } }
 }
-variable "pm_api_url"      { default = "https://<PROXMOX_IP>:8006/api2/json" }
+variable "pm_api_url"      { default = "https://172.18.0.48:8006/api2/json" }
 variable "pm_api_token_id" {}
 variable "pm_api_token_secret" {}
 variable "node"            { default = "proxmox" }
@@ -19,7 +19,7 @@ provider "proxmox" {
 resource "proxmox_vm_qemu" "win11" {
   name        = var.vm_name
   target_node = var.node
-  clone       = "tpl-win11-25h2"
+  clone       = "Custom-template-Win11"
   cores       = 2
   memory      = 4096
   agent       = 1
