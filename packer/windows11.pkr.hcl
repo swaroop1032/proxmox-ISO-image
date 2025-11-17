@@ -7,7 +7,7 @@ packer {
   }
 }
 
-variable "pm_url"       { default = "https://<YOUR_PVE_IP>:8006/api2/json" }
+variable "pm_url"       { default = "https://172.18.0.48:8006/api2/json" }
 variable "pm_user"      {}
 variable "pm_token"     {}
 variable "node"         { default = "proxmox" }
